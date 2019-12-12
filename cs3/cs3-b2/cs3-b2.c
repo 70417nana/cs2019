@@ -24,6 +24,7 @@ typedef struct {
 } stkque_t;
 
 stkque_t stack;
+stkque_t ququququq;
 
 /**
  *  @fn     get_start_point  
