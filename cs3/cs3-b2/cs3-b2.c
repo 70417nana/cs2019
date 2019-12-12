@@ -24,7 +24,7 @@ typedef struct {
 } stkque_t;
 
 stkque_t stack;
-stkque_t ququququq;
+//qwertyuiop
 
 /**
  *  @fn     get_start_point  
@@ -82,18 +82,18 @@ void push(int x, int y){
 // stackから整数を1つ取り出す
 void pop(void){
     //popした値を格納
-    pop_x = stack.x_array[stack.head.x];
-    pop_y = stack.y_array[stack.head.y];
+    pop_x = stack.x_array[stack.tail.x - 1];
+    pop_y = stack.y_array[stack.tail.y - 1];
     //先頭の要素番号インクリメント
-    stack.head.x++;
-    stack.head.y++; 
+    stack.tail.x--;
+    stack.tail.y--; 
     printf("pop(%d, %d)\n", pop_x, pop_y);
 }
 
 // stackが空だったら非0の整数を返し，中身があったら0を返す．
 int stackempty(void){
     //head = tailなら空
-    if ((stack.head.x == stack.tail.x) || (stack.head.y == stack.tail.y)){
+    if ((stack.tail.x == 0) || (stack.tail.y == 0)){
         printf("stack is empty!\n");
         return 1;
     } else {
@@ -101,13 +101,55 @@ int stackempty(void){
     }
 }
 
-//最短経路表示関数
-void findShortestRoute(int width, int height, char map[][MAX + 2]){
+char inttochar(int intnum){
+    switch (intnum)
+    {
+    case 0:
+        return '0';
+        break;
+    case 1:
+        return '1';
+        break;
+    case 2:
+        return '2';
+        break;
+    case 3:
+        return '3';
+        break;
+    case 4:
+        return '4';
+        break;
+    case 5:
+        return '5';
+        break;
+    case 6:
+        return '6';
+        break;
+    case 7:
+        return '7';
+        break;
+    case 8:
+        return '8';
+        break;
+    case 9:
+        return '9';
+        break;
+    
+    default:
+        return '%';
+        break;
+    }
+}
+
+//経路表示関数
+void foundRoute(int width, int height, char map[][MAX + 2]){
     int i, j;  //ループカウンタ
     char goaltmp = map[glpnt_x[0]][glpnt_y[0]]; //あとで消しちゃうから入れておく
     int adj[5] = {0, 1, 0, -1, 0}; //5つめは1つめと同じ
     int pnt_x = glpnt_x[0];
     int pnt_y = glpnt_y[0];
+    int tmp_y;
+    int tmp_map[MAX + 2][MAX + 2];
     push(glpnt_x[0], glpnt_y[0]);  //push goal point
     while (map[pnt_x][pnt_y] != '1'){
         for(i = 0; i < 4; i++){
@@ -123,19 +165,44 @@ void findShortestRoute(int width, int height, char map[][MAX + 2]){
     for(i = 0; i < height + 2; i++){
 		for(j=0; j < width + 2; j++){
             if(map[i][j] != '+'){
-                map[i][j] = ' ';
+                tmp_map[i][3 * j] = ' ';
+                tmp_map[i][3 * j + 1] = ' ';
+                tmp_map[i][3 * j + 2] = ' ';
+            }else{
+                tmp_map[i][3 * j] = ' ';
+                tmp_map[i][3 * j + 1] = ' ';
+                tmp_map[i][3 * j + 2] = '+';
             }
 		}
 	}
-    i = 0;  //初期化
+    for(i = 0; i < height + 2; i++){
+		for(j=0; j < 3 * (width + 2); j++){
+           map[i][j] = tmp_map[i][j];
+		}
+	}
+    i = 1;  //初期化
     while (!stackempty()){
         pop();
-        map[pop_x][pop_y] = goaltmp - i;
+        tmp_y = 3 * pop_y;
+        if(i < 10){
+            map[pop_x][tmp_y] = ' ';
+            map[pop_x][tmp_y + 1] = ' ';
+            map[pop_x][tmp_y + 2] = inttochar(i);
+        } else if(i < 100){
+            map[pop_x][tmp_y] = ' ';
+            map[pop_x][tmp_y + 1] = inttochar(i / 10);
+            map[pop_x][tmp_y + 2] = inttochar(i - 10 * (i / 10));
+        } else if(i < 1000){
+            map[pop_x][tmp_y] = inttochar(i / 100);
+            map[pop_x][tmp_y + 1] = inttochar((i - 100 * (i / 100)) / 10);
+            map[pop_x][tmp_y + 2] = inttochar(i - 100 * (i / 100) - 10 * (i / 10));
+        }
         i++;
     }
     //表示
+    printf("result:\n");
     for(i = 0; i < height + 2; i++){
-		for(j=0; j < width + 2; j++){
+		for(j=0; j < 3 * (width + 2); j++){
 			printf("%c", map[i][j]);
 		}
 		printf("\n");
@@ -181,7 +248,7 @@ void findRoute(int width, int height, char map[][MAX + 2]){//width:幅 height:�
             printf("\n");
 	    }
     }
-    findShortestRoute(width, height, map);
+    foundRoute(width, height, map);
 }
 
 
