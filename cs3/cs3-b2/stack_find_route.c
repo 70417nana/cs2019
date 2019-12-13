@@ -196,4 +196,3 @@ void findRoute(int width, int height, char map[][MAX + 2]){//width:å¹… height:é«
     }
     foundRoute(width, height, map);
 }
-
