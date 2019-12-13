@@ -1,5 +1,5 @@
-out: cs3-b2.o
-	gcc -o out cs3-b2.c
+out: cs3-b1.o
+	gcc -o out cs3-b1.c
 .c.o:
 	gcc -c $<
 clean:
