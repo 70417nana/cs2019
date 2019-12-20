@@ -212,15 +212,16 @@ void findShortestRoute(int width, int height, char map[][MAX + 2]){
     int adj[5] = {0, 1, 0, -1, 0}; //5つめは1つめと同じ
     int pnt_x, pnt_y;
 //かえたよ
-    // int minGoal = getMinGoal(map);
-    // pnt_x = glpnt_x[minGoal];
-    // pnt_y = glpnt_y[minGoal];
-    // goaltmp = map[glpnt_x[minGoal]][glpnt_y[minGoal]];
-    // put(glpnt_x[minGoal], glpnt_y[minGoal]);  //put goal point
-    pnt_x = glpnt_x[0];
-    pnt_y = glpnt_y[0];
-    goaltmp = map[glpnt_x[0]][glpnt_y[0]];
-    put(glpnt_x[0], glpnt_y[0]);
+    int minGoal = getMinGoal(map);
+    pnt_x = glpnt_x[minGoal];
+    pnt_y = glpnt_y[minGoal];
+    goaltmp = map[glpnt_x[minGoal]][glpnt_y[minGoal]];
+    put(glpnt_x[minGoal], glpnt_y[minGoal]);  //put goal point
+//
+    // pnt_x = glpnt_x[0];
+    // pnt_y = glpnt_y[0];
+    // goaltmp = map[glpnt_x[0]][glpnt_y[0]];
+    // put(glpnt_x[0], glpnt_y[0]);
     while (map[pnt_x][pnt_y] != '1'){
         for(i = 0; i < 4; i++){
             if(map[pnt_x + adj[i]][pnt_y + adj[i + 1]] == map[pnt_x][pnt_y] - 1){
@@ -266,7 +267,8 @@ void findRoute(int width, int height, char map[][MAX + 2]){//width:幅 height:�
 	//経路探索アルゴリズムの実装部分    
     get_start_point(width, height, map);     //start座標の検出
 //かえたよ
-    // get_goal_point(width, height, map);      //goal座標の検出
+    get_goal_point(width, height, map);      //goal座標の検出
+//    
     queueinit();
     //スタート位置の設定
     for(i = 0; i < startpoint_num; i++){
@@ -277,28 +279,28 @@ void findRoute(int width, int height, char map[][MAX + 2]){//width:幅 height:�
     while(!queueempty()){
         get();
 //かえたよ
-        // for(i = 0; i < 4; i++){      
-        //     //0なら座標をqueueにputしてから番号を振る
-        //     if(((map[get_x + adj[i]][get_y + adj[i + 1]]) == '0') || ((map[get_x + adj[i]][get_y + adj[i + 1]]) == 'g')){
-        //         put(get_x + adj[i], get_y + adj[i + 1]);
-        //         map[get_x + adj[i]][get_y + adj[i + 1]] = map[get_x][get_y] + 1;
-        //     }
-        // }
         for(i = 0; i < 4; i++){      
             //0なら座標をqueueにputしてから番号を振る
-            if((map[get_x + adj[i]][get_y + adj[i + 1]]) == '0'){
+            if(((map[get_x + adj[i]][get_y + adj[i + 1]]) == '0') || ((map[get_x + adj[i]][get_y + adj[i + 1]]) == 'g')){
                 put(get_x + adj[i], get_y + adj[i + 1]);
                 map[get_x + adj[i]][get_y + adj[i + 1]] = map[get_x][get_y] + 1;
-            }else if((map[get_x + adj[i]][get_y + adj[i + 1]]) == 'g'){
-                put(get_x + adj[i], get_y + adj[i + 1]);
-                map[get_x + adj[i]][get_y + adj[i + 1]] = map[get_x][get_y] + 1;
-                glpnt_x[0] = get_x + adj[i];
-                glpnt_y[0] = get_y + adj[i + 1];
-                printf("goal point:(%d, %d)\n",glpnt_x[0], glpnt_y[0]);
-                // return;
             }
         }
-        // printRoute(width, height, map);
+//
+        // for(i = 0; i < 4; i++){      
+        //     //0なら座標をqueueにputしてから番号を振る
+        //     if((map[get_x + adj[i]][get_y + adj[i + 1]]) == '0'){
+        //         put(get_x + adj[i], get_y + adj[i + 1]);
+        //         map[get_x + adj[i]][get_y + adj[i + 1]] = map[get_x][get_y] + 1;
+        //     }else if((map[get_x + adj[i]][get_y + adj[i + 1]]) == 'g'){
+        //         put(get_x + adj[i], get_y + adj[i + 1]);
+        //         map[get_x + adj[i]][get_y + adj[i + 1]] = map[get_x][get_y] + 1;
+        //         glpnt_x[0] = get_x + adj[i];
+        //         glpnt_y[0] = get_y + adj[i + 1];
+        //         printf("goal point:(%d, %d)\n",glpnt_x[0], glpnt_y[0]);
+        //         // return;
+        //     }
+        // }
         //表示
         for(i=0; i < height + 2; i++){
             for(j=0; j < width + 2; j++){
